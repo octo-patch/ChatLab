@@ -58,6 +58,8 @@ describe('isReasoningModel', () => {
 
   it('returns true for known reasoning model families', () => {
     assert.equal(isReasoningModel('minimax', 'minimax-m2'), true)
+    assert.equal(isReasoningModel('minimax', 'MiniMax-M3'), true)
+    assert.equal(isReasoningModel('minimax', 'MiniMax-M2.7'), true)
     assert.equal(isReasoningModel('baichuan', 'baichuan-m3'), true)
     assert.equal(isReasoningModel('mistral', 'mistral-small-2603'), true)
     assert.equal(isReasoningModel('step', 'step-3'), true)
@@ -271,5 +273,9 @@ describe('getThinkingCompat', () => {
 
     const compat2 = getThinkingCompat('minimax', 'minimax-m2')
     assert.equal(compat2.thinkingFormat, 'deepseek')
+
+    // MiniMax-M3 keeps the deepseek thinking format used by the rest of the family.
+    const compat3 = getThinkingCompat('minimax', 'MiniMax-M3')
+    assert.equal(compat3.thinkingFormat, 'deepseek')
   })
 })
