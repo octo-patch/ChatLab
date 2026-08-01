@@ -240,12 +240,12 @@ const MINIMAX: ProviderDefinition = {
   kind: 'official',
   website: 'https://www.minimaxi.com',
   consoleUrl: 'https://platform.minimaxi.com/user-center/basic-information/interface-key',
-  defaultBaseUrl: 'https://api.minimaxi.com/v1',
+  defaultBaseUrl: 'https://api.minimax.io/v1',
   authMode: 'api-key',
   supportsCustomModels: true,
   builtin: true,
   enabledByDefault: true,
-  modelIds: ['MiniMax-M2.7', 'MiniMax-M2.7-highspeed', 'MiniMax-M2.5', 'MiniMax-M2.5-highspeed'],
+  modelIds: ['MiniMax-M3', 'MiniMax-M2.7', 'MiniMax-M2.7-highspeed', 'MiniMax-M2.5', 'MiniMax-M2.5-highspeed'],
 }
 
 const OPENAI_COMPATIBLE: ProviderDefinition = {
