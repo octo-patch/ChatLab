@@ -827,10 +827,20 @@ const XAI_MODELS: ModelDefinition[] = [
 
 const MINIMAX_MODELS: ModelDefinition[] = [
   builtin({
+    id: 'MiniMax-M3',
+    providerId: 'minimax',
+    name: 'MiniMax M3',
+    description: 'Flagship model, 1M context, adaptive thinking, image & video input',
+    contextWindow: 1000000,
+    capabilities: ['chat', 'reasoning', 'vision', 'function_calling'],
+    recommendedFor: ['chat'],
+    status: 'stable',
+  }),
+  builtin({
     id: 'MiniMax-M2.7',
     providerId: 'minimax',
     name: 'MiniMax M2.7',
-    description: 'Latest flagship model',
+    description: 'Previous generation flagship',
     contextWindow: 200000,
     capabilities: ['chat', 'function_calling'],
     recommendedFor: ['chat'],
