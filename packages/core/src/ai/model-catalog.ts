@@ -445,7 +445,7 @@ const GLM_MODELS: ModelDefinition[] = [
     id: 'glm-5',
     providerId: 'glm',
     name: 'GLM-5',
-    description: 'Latest flagship model',
+    description: 'Flagship model, 1M context, adaptive or disabled thinking, text, image, and video input',
     contextWindow: 200000,
     capabilities: ['chat', 'reasoning', 'function_calling'],
     recommendedFor: ['chat'],
