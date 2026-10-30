@@ -827,6 +827,26 @@ const XAI_MODELS: ModelDefinition[] = [
 
 const MINIMAX_MODELS: ModelDefinition[] = [
   builtin({
+    id: 'MiniMax-M3.1-Flash',
+    providerId: 'minimax',
+    name: 'MiniMax M3.1 Flash',
+    description: 'Multimodal coding model with 1M context and tunable reasoning',
+    contextWindow: 1000000,
+    capabilities: ['chat', 'reasoning', 'vision', 'function_calling'],
+    recommendedFor: ['chat'],
+    status: 'stable',
+  }),
+  builtin({
+    id: 'MiniMax-M3',
+    providerId: 'minimax',
+    name: 'MiniMax M3',
+    description: 'Multimodal coding model with 1M context',
+    contextWindow: 1000000,
+    capabilities: ['chat', 'reasoning', 'vision', 'function_calling'],
+    recommendedFor: [],
+    status: 'stable',
+  }),
+  builtin({
     id: 'MiniMax-M2.7',
     providerId: 'minimax',
     name: 'MiniMax M2.7',
