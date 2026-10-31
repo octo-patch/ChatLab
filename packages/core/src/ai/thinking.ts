@@ -34,6 +34,7 @@ type ThinkingType =
   | 'grok' // xAI grok: can't disable; low/high only
   | 'kimi' // Kimi thinking: off/auto/low/medium/high
   | 'doubao' // Doubao seed reasoning: off/auto/high
+  | 'minimax_m31_flash' // MiniMax M3.1 Flash: always-on thinking with effort levels
   | 'hunyuan' // Hunyuan: enable_thinking boolean, similar to qwen
   | 'gemini' // Gemini 2.5+: thinking level via Google API (off/low/medium/high)
   | 'default' // generic reasoning: off / low / medium / high
@@ -53,6 +54,7 @@ const TYPE_LEVELS: Record<ThinkingType, ThinkingLevel[]> = {
   grok: ['default', 'low', 'high'],
   kimi: ['default', 'off', 'auto', 'low', 'medium', 'high'],
   doubao: ['default', 'off', 'auto', 'high'],
+  minimax_m31_flash: ['default', 'low', 'medium', 'high', 'xhigh'],
   hunyuan: ['default', 'off', 'high'],
   gemini: ['default', 'off', 'low', 'medium', 'high'],
   default: ['default', 'off', 'low', 'medium', 'high'],
@@ -106,6 +108,12 @@ const TYPE_LEVEL_MAP: Partial<Record<ThinkingType, Partial<Record<ThinkingLevel,
     off: null,
     auto: 'auto',
     high: 'high',
+  },
+  minimax_m31_flash: {
+    low: 'low',
+    medium: 'medium',
+    high: 'high',
+    xhigh: 'max',
   },
   deepseek_hybrid: {
     off: null,
@@ -180,6 +188,8 @@ function classifyThinkingType(provider: string, modelId: string): ThinkingType {
 
   // ── SiliconFlow hosted reasoning models (DeepSeek R1 family) ──
   if (prov === 'siliconflow' && /r[1-9]/i.test(id)) return 'deepseek_v4'
+
+  if (prov === 'minimax' && /\bminimax-m3\.1-flash\b/i.test(id)) return 'minimax_m31_flash'
 
   // ── OpenRouter: classify by inner model id ──
   if (prov === 'openrouter') {
@@ -275,6 +285,14 @@ export function getThinkingCompat(provider: string, modelId: string): ThinkingCo
     return {
       thinkingFormat: 'deepseek',
       thinkingLevelMap: { auto: 'auto', high: 'high', minimal: null, low: null, medium: null, xhigh: null },
+    }
+  }
+
+  if (type === 'minimax_m31_flash') {
+    return {
+      thinkingFormat: 'deepseek',
+      supportsReasoningEffort: true,
+      thinkingLevelMap: TYPE_LEVEL_MAP.minimax_m31_flash,
     }
   }
 
