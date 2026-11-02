@@ -124,6 +124,15 @@ describe('buildPiModel', () => {
     assert.deepEqual(model.compat, { thinkingFormat: 'qwen', supportsDeveloperRole: false })
   })
 
+  it('builds MiniMax M3 models with their catalog context and thinking support', () => {
+    for (const modelId of ['MiniMax-M3.1-Flash', 'MiniMax-M3']) {
+      const model = buildPiModel({ provider: 'minimax', model: modelId })
+      assert.equal(model.contextWindow, 1000000)
+      assert.equal(model.reasoning, true)
+      assert.equal((model.compat as Record<string, unknown> | undefined)?.thinkingFormat, 'deepseek')
+    }
+  })
+
   it('auto-infers reasoning=true and compat.thinkingFormat=qwen for custom self-hosted qwen3 model', () => {
     // Custom model not in catalog — falls back to name heuristic
     const model = buildPiModel(
