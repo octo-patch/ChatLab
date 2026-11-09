@@ -36,6 +36,7 @@ type ThinkingType =
   | 'doubao' // Doubao seed reasoning: off/auto/high
   | 'hunyuan' // Hunyuan: enable_thinking boolean, similar to qwen
   | 'gemini' // Gemini 2.5+: thinking level via Google API (off/low/medium/high)
+  | 'minimax_m3_1' // MiniMax M3.1: reasoning_effort with max represented by xhigh
   | 'default' // generic reasoning: off / low / medium / high
 
 // ── Internal: per-type level tables ──────────────────────────────────────────
@@ -55,6 +56,7 @@ const TYPE_LEVELS: Record<ThinkingType, ThinkingLevel[]> = {
   doubao: ['default', 'off', 'auto', 'high'],
   hunyuan: ['default', 'off', 'high'],
   gemini: ['default', 'off', 'low', 'medium', 'high'],
+  minimax_m3_1: ['default', 'low', 'medium', 'high', 'xhigh'],
   default: ['default', 'off', 'low', 'medium', 'high'],
 }
 
@@ -111,6 +113,12 @@ const TYPE_LEVEL_MAP: Partial<Record<ThinkingType, Partial<Record<ThinkingLevel,
     off: null,
     auto: 'auto',
     high: 'high',
+  },
+  minimax_m3_1: {
+    low: 'low',
+    medium: 'medium',
+    high: 'high',
+    xhigh: 'max',
   },
 }
 
@@ -190,6 +198,9 @@ function classifyThinkingType(provider: string, modelId: string): ThinkingType {
     if (REASONING_FALLBACK_REGEX.test(id)) return 'default'
     return 'none'
   }
+
+  // MiniMax M3.1 uses reasoning_effort.
+  if (prov === 'minimax' && /\bminimax-m3\.1(?:-|$)/i.test(id)) return 'minimax_m3_1'
 
   // ── Models using thinking:{type:'disabled'/'enabled'} format (same as DeepSeek) ──
   if (/\bmimo-v2/i.test(id)) return 'deepseek_hybrid'

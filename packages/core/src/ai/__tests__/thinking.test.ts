@@ -272,4 +272,19 @@ describe('getThinkingCompat', () => {
     const compat2 = getThinkingCompat('minimax', 'minimax-m2')
     assert.equal(compat2.thinkingFormat, 'deepseek')
   })
+
+  it('uses reasoning effort for MiniMax M3.1', () => {
+    assert.deepEqual(getSupportedThinkingLevels('minimax', 'MiniMax-M3.1-Flash'), [
+      'default',
+      'low',
+      'medium',
+      'high',
+      'xhigh',
+    ])
+
+    const compat = getThinkingCompat('minimax', 'MiniMax-M3.1-Flash')
+    assert.equal(compat.supportsReasoningEffort, true)
+    assert.equal(compat.thinkingFormat, undefined)
+    assert.equal(compat.thinkingLevelMap?.xhigh, 'max')
+  })
 })

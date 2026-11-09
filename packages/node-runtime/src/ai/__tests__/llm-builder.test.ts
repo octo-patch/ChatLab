@@ -205,4 +205,17 @@ describe('buildPiModel', () => {
     )
     assert.equal(model.contextWindow, 32000)
   })
+
+  it('builds MiniMax M3.1 Flash with its catalog context and reasoning effort', () => {
+    const model = buildPiModel({
+      provider: 'minimax',
+      model: 'MiniMax-M3.1-Flash',
+      baseUrl: 'https://api.minimax.io/v1',
+    })
+
+    assert.equal(model.contextWindow, 1_000_000)
+    assert.equal(model.reasoning, true)
+    assert.equal((model.compat as Record<string, unknown> | undefined)?.supportsReasoningEffort, true)
+    assert.equal((model.thinkingLevelMap as Record<string, unknown> | undefined)?.xhigh, 'max')
+  })
 })
