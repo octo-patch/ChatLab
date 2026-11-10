@@ -36,6 +36,7 @@ type ThinkingType =
   | 'doubao' // Doubao seed reasoning: off/auto/high
   | 'hunyuan' // Hunyuan: enable_thinking boolean, similar to qwen
   | 'gemini' // Gemini 2.5+: thinking level via Google API (off/low/medium/high)
+  | 'minimax_m31' // MiniMax M3.1: always-on reasoning_effort with xhigh mapped to max
   | 'default' // generic reasoning: off / low / medium / high
 
 // ── Internal: per-type level tables ──────────────────────────────────────────
@@ -55,6 +56,7 @@ const TYPE_LEVELS: Record<ThinkingType, ThinkingLevel[]> = {
   doubao: ['default', 'off', 'auto', 'high'],
   hunyuan: ['default', 'off', 'high'],
   gemini: ['default', 'off', 'low', 'medium', 'high'],
+  minimax_m31: ['default', 'low', 'medium', 'high', 'xhigh'],
   default: ['default', 'off', 'low', 'medium', 'high'],
 }
 
@@ -111,6 +113,12 @@ const TYPE_LEVEL_MAP: Partial<Record<ThinkingType, Partial<Record<ThinkingLevel,
     off: null,
     auto: 'auto',
     high: 'high',
+  },
+  minimax_m31: {
+    low: 'low',
+    medium: 'medium',
+    high: 'high',
+    xhigh: 'max',
   },
 }
 
@@ -180,6 +188,9 @@ function classifyThinkingType(provider: string, modelId: string): ThinkingType {
 
   // ── SiliconFlow hosted reasoning models (DeepSeek R1 family) ──
   if (prov === 'siliconflow' && /r[1-9]/i.test(id)) return 'deepseek_v4'
+
+  // ── MiniMax M3.1 always-on reasoning effort ──
+  if (/\bminimax-m3\.1\b/i.test(id)) return 'minimax_m31'
 
   // ── OpenRouter: classify by inner model id ──
   if (prov === 'openrouter') {

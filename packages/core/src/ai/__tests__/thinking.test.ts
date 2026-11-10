@@ -67,6 +67,11 @@ describe('isReasoningModel', () => {
     assert.equal(isReasoningModel('bytedance', 'seed-oss-36b'), true)
   })
 
+  it('returns true for MiniMax M3 models', () => {
+    assert.equal(isReasoningModel('minimax', 'MiniMax-M3.1-Flash'), true)
+    assert.equal(isReasoningModel('minimax', 'MiniMax-M3'), true)
+  })
+
   it('returns true for kimi k2.5+ models', () => {
     assert.equal(isReasoningModel('kimi', 'kimi-k2.5'), true)
     assert.equal(isReasoningModel('kimi', 'kimi-k3'), true)
@@ -181,6 +186,16 @@ describe('getSupportedThinkingLevels', () => {
     assert.deepEqual(getSupportedThinkingLevels('openai-compatible', 'mimo-v2-flash'), ['default', 'off', 'auto'])
   })
 
+  it('returns the always-on effort levels for MiniMax M3.1', () => {
+    assert.deepEqual(getSupportedThinkingLevels('minimax', 'MiniMax-M3.1-Flash'), [
+      'default',
+      'low',
+      'medium',
+      'high',
+      'xhigh',
+    ])
+  })
+
   it('returns default+off+low+medium+high for generic reasoning (fallback)', () => {
     assert.deepEqual(getSupportedThinkingLevels('openai-compatible', 'some-reasoning-model'), [
       'default',
@@ -234,6 +249,13 @@ describe('getThinkingCompat', () => {
     const compat = getThinkingCompat('openai', 'o3')
     assert.equal(compat.supportsReasoningEffort, true)
     assert.equal(compat.thinkingLevelMap, undefined)
+  })
+
+  it('maps MiniMax M3.1 xhigh effort to max', () => {
+    assert.deepEqual(getThinkingCompat('minimax', 'MiniMax-M3.1-Flash'), {
+      supportsReasoningEffort: true,
+      thinkingLevelMap: { low: 'low', medium: 'medium', high: 'high', xhigh: 'max' },
+    })
   })
 
   it('returns supportsReasoningEffort + off:none for gpt-5.1', () => {

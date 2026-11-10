@@ -102,6 +102,19 @@ describe('buildPiModel', () => {
     assert.equal((model.compat as Record<string, unknown> | undefined)?.thinkingLevelMap, undefined)
   })
 
+  it('builds current MiniMax models from the catalog', () => {
+    const flash = buildPiModel({ provider: 'minimax', model: 'MiniMax-M3.1-Flash' })
+    assert.equal(flash.contextWindow, 1000000)
+    assert.equal(flash.reasoning, true)
+    assert.equal(flash.compat?.supportsReasoningEffort, true)
+    assert.equal(flash.thinkingLevelMap?.xhigh, 'max')
+
+    const standard = buildPiModel({ provider: 'minimax', model: 'MiniMax-M3' })
+    assert.equal(standard.contextWindow, 1000000)
+    assert.equal(standard.reasoning, true)
+    assert.equal(standard.compat?.thinkingFormat, 'deepseek')
+  })
+
   it('auto-infers reasoning=false and compat=undefined for non-reasoning OpenAI model', () => {
     // gpt-4o is not a reasoning model; no enable_thinking should ever be injected
     const model = buildPiModel({
